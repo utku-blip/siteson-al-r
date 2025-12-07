@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>İletişim — Goodieflow</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+
+<header class="site-header">
+  <div class="site-header-wrapper">
+    <div class="brand">
+      <div class="logo-image">
+        <img src="logo.png" alt="Logo">
+      </div>
+    </div>
+
+    <nav class="site-nav">
+      <a href="./index.html#hero">Ana Sayfa</a>
+      <a href="#services">Hizmetler</a>
+      <a href="#how-it-works">Nasıl Çalışır?</a>
+      <a href="#pricing">Fiyatlandırma</a>
+      <a href="./index.html#about">Hakkımızda</a>
+      <a href="./index.html#contact">İletişim</a>
+    </nav>
+  </div>
+</header>
+
+
+
+<main>
+<section class="section container contact-section visible">
+  <h2 class="section-title">Demo Talep Et</h2>
+  <p class="section-subtitle">
+    Goodieflow platformunu deneyimlemek için hızlıca bir demo talep edin.
+    Uzmanlarımız sizinle en kısa sürede iletişime geçecek.
+  </p>
+
+  <div class="contact-card">
+    <form class="contact-form" method="POST" action="/api/demo">
+      <div class="form-group">
+        <label>Ad Soyad</label>
+        <input type="text" name="name" placeholder="Adınızı yazın" required>
+      </div>
+
+      <div class="form-group">
+        <label>E-posta Adresi</label>
+        <input type="email" name="email" placeholder="ornek@mail.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Şirket Adı</label>
+        <input type="text" name="company" placeholder="Şirket adınız">
+      </div>
+
+      <div class="form-group">
+        <label>Not / Açıklama</label>
+        <textarea name="note" placeholder="Kısa bir açıklama ekleyin"></textarea>
+      </div>
+
+      <button class="contact-submit">Demo Talep Et</button>
+    </form>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section visible">
+    <h2>Hemen Demo Talep Edin</h2>
+    <p>Goodieflow ile iş süreçlerinizi otomatikleştirin ve verimliliğinizi artırın.</p>
+    <a class="cta-button" href="#contact">Demo Talep Et</a>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section visible">
+    <h2>Sıkça Sorulan Sorular</h2>
+
+    <div class="faq-item">
+        <h3>Demo görüşmesi ne kadar sürer?</h3>
+        <p>Genellikle 15-20 dakika arasında sürer ve ihtiyaçlarınıza göre özelleştirilir.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Demo talebi ücretsiz mi?</h3>
+        <p>Evet, tamamen ücretsiz bir tanıtım görüşmesi sunuyoruz.</p>
+    </div>
+
+    <div class="faq-item">
+        <h3>Görüşmeden sonra ne olacak?</h3>
+        <p>Uzmanlarımız sizden aldığı bilgilere göre size özel bir teklif hazırlar.</p>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector(".contact-form");
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        alert("Teşekkürler! Demo talebiniz başarıyla gönderildi.");
+    });
+});
+</script>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">© 2025 Goodieflow</div>
+</footer>
+<script type="module" src="src/main.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector(".contact-form");
+
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const json = Object.fromEntries(formData.entries());
+
+        const response = await fetch("/api/demo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(json)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert("Teşekkürler! Demo talebiniz başarıyla gönderildi.");
+            form.reset();
+        }
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Goodieflow Admin Dashboard</title>
+  <style>
+    body { font-family: Arial; background:#f5f5f5; margin:0; padding:0; }
+    #login-box, #admin-content { max-width:480px; margin:80px auto; padding:20px; background:white; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+    input, button { width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #ddd; font-size:16px; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { padding:10px; border-bottom:1px solid #ddd; text-align:left; }
+    #admin-content { display:none; }
+  </style>
+</head>
+<body>
+
+<div id="login-box">
+  <h2>Admin Girişi</h2>
+  <input type="password" id="pw" placeholder="Şifre">
+  <button onclick="login()">Giriş Yap</button>
+  <p id="error" style="color:red; display:none;">Hatalı şifre!</p>
+</div>
+
+<div id="admin-content">
+  <h2>Başvurular</h2>
+  <table id="table">
+    <tr><th>İsim</th><th>Email</th><th>Mesaj</th><th>Tarih</th></tr>
+  </table>
+</div>
+
+<script>
+const HASH = "c2e6a7b4e7a3c3ea1d0f8d29b43bb5cbcd49f802b745a6f4bcb9dc20ce8d8710";
+
+async function hash(input){
+  const encoded = new TextEncoder().encode(input);
+  const buffer = await crypto.subtle.digest("SHA-256", encoded);
+  return Array.from(new Uint8Array(buffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function login(){
+  const pw = document.getElementById("pw").value;
+  if(await hash(pw) === HASH){
+    document.getElementById("login-box").style.display="none";
+    document.getElementById("admin-content").style.display="block";
+    loadData();
+  } else {
+    document.getElementById("error").style.display="block";
+  }
+}
+
+async function loadData(){
+  const res = await fetch("/api/get-submissions");
+  const data = await res.json();
+  const t = document.getElementById("table");
+  data.forEach(x=>{
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${x.name}</td><td>${x.email}</td><td>${x.message}</td><td>${new Date(x.createdAt).toLocaleString()}</td>`;
+    t.appendChild(row);
+  });
+}
+</script>
+
+</body>
+</html>
